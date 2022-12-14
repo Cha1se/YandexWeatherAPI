@@ -45,18 +45,20 @@ class MainActivity : AppCompatActivity() {
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-        GlobalScope.launch {
-            while (true) {
-                UpdateWeather()
-                delay(3600000)
-            }
-        }
+//        GlobalScope.launch {
+//            while (true) {
+//                UpdateWeather()
+//                delay(3600000)
+//            }
+//        }
+        var intent = Intent(this, WeatherService::class.java)
+        startService(intent)
 
     }
 
     public fun UpdateWeather() {
 
-        var remoteViews: RemoteViews = RemoteViews(packageName, R.layout.notification_layout)
+        /*var remoteViews: RemoteViews = RemoteViews(packageName, R.layout.notification_layout)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
@@ -97,7 +99,7 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<DataList>?, t: Throwable?) {
                 Log.e("TAG", t?.message.toString())
             }
-        })
+        })*/
 
     }
 
