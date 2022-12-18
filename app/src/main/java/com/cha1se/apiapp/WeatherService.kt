@@ -4,9 +4,11 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
+import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
@@ -27,8 +29,8 @@ class WeatherService : Service() {
     private val channelId = "i.apps.notifications"
     private val description = "Test notification"
 
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
+    override fun onBind(intent: Intent): IBinder? {
+        return Binder()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -38,6 +40,7 @@ class WeatherService : Service() {
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         GlobalScope.launch {
+
             while (true) {
 
                 var remoteViews: RemoteViews = RemoteViews(packageName, R.layout.notification_layout)
@@ -55,7 +58,8 @@ class WeatherService : Service() {
                         .setOnlyAlertOnce(true)
                         .setAutoCancel(false)
                         .setCustomContentView(remoteViews)
-                } else {
+                }
+                else {
 
                     builder = Notification.Builder(context!!)
                         .setSmallIcon(R.drawable.cloudy)
@@ -74,7 +78,7 @@ class WeatherService : Service() {
                         if(response?.body() != null) {
                             remoteViews.setTextViewText(R.id.tempText, response.body()?.fact?.temp.toString() + "°")
                             remoteViews.setTextViewText(R.id.feels_like_text, "Но ощущается как " + response.body()?.fact?.feels_like.toString() + "°")
-                            notificationManager.notify(1234, builder.build())
+                            startForeground(1, builder.build())
                         }
                     }
 
@@ -83,11 +87,12 @@ class WeatherService : Service() {
                     }
                 })
 
-                delay(3600000)
+                delay(60000)
+
             }
         }
 
-        return super.onStartCommand(intent, flags, startId)
+        return Service.START_STICKY
     }
 
     override fun onDestroy() {

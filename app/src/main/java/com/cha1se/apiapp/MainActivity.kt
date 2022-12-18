@@ -45,61 +45,8 @@ class MainActivity : AppCompatActivity() {
 
         notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-//        GlobalScope.launch {
-//            while (true) {
-//                UpdateWeather()
-//                delay(3600000)
-//            }
-//        }
         var intent = Intent(this, WeatherService::class.java)
-        startService(intent)
-
-    }
-
-    public fun UpdateWeather() {
-
-        /*var remoteViews: RemoteViews = RemoteViews(packageName, R.layout.notification_layout)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationChannel = NotificationChannel(channelId, description, NotificationManager.IMPORTANCE_HIGH)
-            notificationChannel.enableLights(false)
-            notificationChannel.enableVibration(false)
-            notificationManager.createNotificationChannel(notificationChannel)
-
-            builder = Notification.Builder(this, channelId)
-                .setSmallIcon(R.drawable.cloudy)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.cloudy))
-                .setOngoing(true)
-                .setOnlyAlertOnce(true)
-                .setAutoCancel(false)
-                .setCustomContentView(remoteViews)
-        } else {
-
-            builder = Notification.Builder(this)
-                .setSmallIcon(R.drawable.cloudy)
-                .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.cloudy))
-                .setAutoCancel(false)
-                .setOnlyAlertOnce(true)
-                .setOngoing(true)
-                .setCustomContentView(remoteViews)
-        }
-
-        val apiInterface = WeatherAPI.create().getWeatherList()
-
-        apiInterface.enqueue( object : Callback<DataList> {
-            override fun onResponse(call: Call<DataList>?, response: Response<DataList>?) {
-
-                if(response?.body() != null) {
-                    remoteViews.setTextViewText(R.id.tempText, response.body()?.fact?.temp.toString() + "°")
-                    remoteViews.setTextViewText(R.id.feels_like_text, "Но ощущается как " + response.body()?.fact?.feels_like.toString() + "°")
-                    notificationManager.notify(1234, builder.build())
-                }
-            }
-
-            override fun onFailure(call: Call<DataList>?, t: Throwable?) {
-                Log.e("TAG", t?.message.toString())
-            }
-        })*/
+        startForegroundService(intent)
 
     }
 
